@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export async function GET(request: Request) {
   // Check authorization header to ensure only Vercel can trigger this in production
@@ -21,9 +27,27 @@ export async function GET(request: Request) {
     },
   });
 
+  // Fetch dynamic recipient emails from settings.json
+  let recipientEmails = 'vijaymachkuri12@gmail.com, mzjhe9601@gmail.com'; // fallback
+  try {
+    const { data: list } = await supabaseAdmin.storage.from('memories').list('', { searchString: 'settings.json' });
+    if (list && list.some(f => f.name === 'settings.json')) {
+      const { data } = await supabaseAdmin.storage.from('memories').download('settings.json');
+      if (data) {
+        const text = await data.text();
+        const settings = JSON.parse(text);
+        if (settings.recipientEmails) {
+          recipientEmails = settings.recipientEmails;
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load dynamic emails:', err);
+  }
+
   const mailOptions = {
     from: '"Your Monthsary Website" <monthsaryservice@gmail.com>',
-    to: 'vijaymachkuri12@gmail.com, mzjhe9601@gmail.com', // Sending to both of you!
+    to: recipientEmails,
     subject: 'Happy Monthsary! ❤️',
     html: `
       <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; padding: 40px; border-radius: 16px; background: linear-gradient(135deg, #fff1f2 0%, #fdf4ff 100%); border: 2px solid #fbcfe8; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.1);">

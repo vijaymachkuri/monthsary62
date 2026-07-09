@@ -25,6 +25,7 @@ export default function AdminPage() {
 
   // Settings State
   const [letterBody, setLetterBody] = useState<string>('');
+  const [recipientEmails, setRecipientEmails] = useState<string>('vijaymachkuri12@gmail.com, mzjhe9601@gmail.com');
   const [savingSettings, setSavingSettings] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
 
@@ -49,6 +50,7 @@ export default function AdminPage() {
       if (photosData.photos) setPhotos(photosData.photos);
       if (timelineData.timeline) setTimeline(timelineData.timeline);
       if (settingsData.settings?.letterBody) setLetterBody(settingsData.settings.letterBody);
+      if (settingsData.settings?.recipientEmails) setRecipientEmails(settingsData.settings.recipientEmails);
     } catch (err) {
       console.error('Failed to fetch data', err);
     } finally {
@@ -198,13 +200,13 @@ export default function AdminPage() {
       const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ settings: { letterBody } })
+        body: JSON.stringify({ settings: { letterBody, recipientEmails } })
       });
       if (!res.ok) throw new Error('Failed to save settings');
-      alert('Love letter saved!');
+      alert('Settings saved!');
     } catch (err) {
       console.error(err);
-      alert('Error saving letter');
+      alert('Error saving settings');
     } finally {
       setSavingSettings(false);
     }
@@ -312,21 +314,39 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Manual Email Trigger */}
+          {/* Manual Email Trigger & Settings */}
           <div className="glass rounded-2xl p-6 border border-white/20">
             <h2 className="text-2xl font-playfair text-white mb-4 flex items-center gap-2">
-              <Send className="w-5 h-5 text-rose-400" /> Test Email
+              <Send className="w-5 h-5 text-rose-400" /> Email Settings & Trigger
             </h2>
-            <p className="text-sm text-white/70 mb-4">
-              Instantly send the anniversary reminder email to both of your inboxes.
-            </p>
-            <button
-              onClick={handleSendEmail}
-              disabled={emailSending}
-              className="w-full py-2.5 px-4 bg-gradient-to-r from-rose-500 to-red-400 hover:from-rose-400 hover:to-red-300 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20"
-            >
-              {emailSending ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : <><Send className="w-4 h-4" /> Send Now</>}
-            </button>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-white/70 block mb-2">Recipient Emails (comma separated)</label>
+                <input 
+                  type="text"
+                  value={recipientEmails}
+                  onChange={(e) => setRecipientEmails(e.target.value)}
+                  className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-white text-sm font-inter focus:outline-none focus:border-rose-500/50 transition-colors"
+                  placeholder="email1@gmail.com, email2@gmail.com"
+                />
+              </div>
+              <div className="flex gap-4 pt-2">
+                <button
+                  onClick={handleSaveSettings}
+                  disabled={savingSettings}
+                  className="flex-1 py-2.5 px-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {savingSettings ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</> : <><Save className="w-4 h-4" /> Save Emails</>}
+                </button>
+                <button
+                  onClick={handleSendEmail}
+                  disabled={emailSending}
+                  className="flex-1 py-2.5 px-4 bg-gradient-to-r from-rose-500 to-red-400 hover:from-rose-400 hover:to-red-300 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20"
+                >
+                  {emailSending ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : <><Send className="w-4 h-4" /> Send Test Email</>}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

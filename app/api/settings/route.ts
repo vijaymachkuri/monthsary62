@@ -9,7 +9,8 @@ const supabaseAdmin = createClient(
 const FILENAME = 'settings.json';
 
 const defaultSettings = {
-  letterBody: `Happy {MONTH_COUNT} Monthsary! Looking back at the past {MONTHS} months, I am filled with so much gratitude and love for everything we have shared together.\n\nYou are my safe place, my greatest adventure, and my favorite part of every single day. I promise to always choose you, to hold your hand through the highs and lows, and to keep making you smile no matter what.\n\nThank you for being you, and thank you for being mine. I love you more than words can ever say.`
+  letterBody: `Happy {MONTH_COUNT} Monthsary! Looking back at the past {MONTHS} months, I am filled with so much gratitude and love for everything we have shared together.\n\nYou are my safe place, my greatest adventure, and my favorite part of every single day. I promise to always choose you, to hold your hand through the highs and lows, and to keep making you smile no matter what.\n\nThank you for being you, and thank you for being mine. I love you more than words can ever say.`,
+  recipientEmails: 'vijaymachkuri12@gmail.com, mzjhe9601@gmail.com'
 };
 
 export async function GET() {
