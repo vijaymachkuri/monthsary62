@@ -1,12 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Heart } from 'lucide-react';
+import { getMonthsaryCount, getOrdinalSuffix } from '@/lib/utils';
 
 export default function LoveLetter() {
   const [isOpen, setIsOpen] = useState(false);
   const [showText, setShowText] = useState(false);
+  const [letterBody, setLetterBody] = useState<string>('');
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        const data = await res.json();
+        if (data.settings && data.settings.letterBody) {
+          setLetterBody(data.settings.letterBody);
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings', err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const handleOpen = () => {
     if (!isOpen) {
@@ -50,21 +67,32 @@ export default function LoveLetter() {
           >
             {showText && (
               <div className="font-playfair text-gray-800 h-full overflow-y-auto">
-                <p className="text-lg md:text-xl font-bold mb-6">My Dearest Gem,</p>
                 <div className="space-y-4 text-base md:text-lg leading-relaxed opacity-90">
-                  <p>
-                    Happy 62nd Monthsary! Looking back at the past 62 months, I am filled with so much gratitude and love for everything we have shared together.
-                  </p>
-                  <p>
-                    You are my safe place, my greatest adventure, and my favorite part of every single day. 
-                    I promise to always choose you, to hold your hand through the highs and lows, and to keep making you smile no matter what.
-                  </p>
-                  <p>
-                    Thank you for being you, and thank you for being mine. I love you more than words can ever say.
-                  </p>
-                </div>
-                <div className="mt-8 text-right font-bold text-lg">
-                  <p>Forever Yours, Vijay ❤️</p>
+                  {letterBody ? (
+                    letterBody.split('\n').map((paragraph, index) => {
+                      if (!paragraph.trim()) return null;
+                      
+                      const parsedText = paragraph
+                        .replace(/{MONTH_COUNT}/g, getOrdinalSuffix(getMonthsaryCount()).toString())
+                        .replace(/{MONTHS}/g, getMonthsaryCount().toString());
+
+                      // Custom styling for Greeting and Signoff
+                      if (index === 0) {
+                        return <p key={index} className="text-lg md:text-xl font-bold mb-6">{parsedText}</p>;
+                      }
+                      if (index === letterBody.split('\n').filter(p => p.trim()).length - 1) {
+                        return (
+                          <div key={index} className="mt-8 text-right font-bold text-lg">
+                            <p>{parsedText}</p>
+                          </div>
+                        );
+                      }
+
+                      return <p key={index}>{parsedText}</p>;
+                    })
+                  ) : (
+                    <p>Loading your beautiful letter...</p>
+                  )}
                 </div>
               </div>
             )}

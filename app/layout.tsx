@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Happy 62nd Monthsary ❤️',
-  description: 'A love story written in the stars.',
+  title: 'Happy Monthsary ❤️',
+  description: 'A celebration of our love, memories, and time together.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

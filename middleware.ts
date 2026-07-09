@@ -4,8 +4,12 @@ import type { NextRequest } from 'next/server';
 export function middleware(req: NextRequest) {
   const isAdminPage = req.nextUrl.pathname.startsWith('/admin');
   const isProtectedApi = req.nextUrl.pathname.startsWith('/api/photos') && req.method !== 'GET';
+  const isProtectedTimelineApi = req.nextUrl.pathname.startsWith('/api/timeline-photo') && req.method !== 'GET';
+  const isProtectedTimelineDataApi = req.nextUrl.pathname.startsWith('/api/timeline') && req.method !== 'GET' && !req.nextUrl.pathname.startsWith('/api/timeline-photo');
+  const isProtectedSettingsApi = req.nextUrl.pathname.startsWith('/api/settings') && req.method !== 'GET';
+  const isProtectedAdminActionApi = req.nextUrl.pathname.startsWith('/api/admin');
 
-  if (isAdminPage || isProtectedApi) {
+  if (isAdminPage || isProtectedApi || isProtectedTimelineApi || isProtectedTimelineDataApi || isProtectedSettingsApi || isProtectedAdminActionApi) {
     const basicAuth = req.headers.get('authorization');
 
     if (basicAuth) {
@@ -33,5 +37,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/photos/:path*'],
+  matcher: ['/admin/:path*', '/api/photos/:path*', '/api/timeline-photo/:path*', '/api/timeline/:path*', '/api/settings/:path*', '/api/admin/:path*'],
 };

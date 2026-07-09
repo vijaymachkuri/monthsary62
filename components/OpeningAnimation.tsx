@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart } from 'lucide-react';
+import { getMonthsaryCount, getOrdinalSuffix } from '@/lib/utils';
 
 export default function OpeningAnimation({ onComplete }: { onComplete: () => void }) {
   const [stage, setStage] = useState(0);
@@ -94,7 +95,7 @@ export default function OpeningAnimation({ onComplete }: { onComplete: () => voi
             transition={{ duration: 1 }}
             className="text-3xl md:text-6xl font-playfair text-pink-300 font-bold text-center px-4 text-glow"
           >
-            Happy 62nd Monthsary, Gem <span className="inline-block heart-beat">❤️</span>
+            Happy {getOrdinalSuffix(getMonthsaryCount())} Monthsary, Gem <span className="inline-block heart-beat">❤️</span>
           </motion.div>
         )}
 

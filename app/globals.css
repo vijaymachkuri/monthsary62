@@ -15,6 +15,9 @@
 @layer base {
   body {
     @apply bg-[#050510] text-white overflow-x-hidden selection:bg-pink-500/30;
+  }
+  
+  body.custom-cursor-active {
     cursor: none;
   }
   
@@ -106,5 +109,26 @@
 @keyframes blink-caret {
   from, to { border-color: transparent }
   50% { border-color: rgba(255,182,193,0.7); }
+}
+
+/* --- Anniversary Theme (9th of the month) --- */
+body.theme-anniversary {
+  background: radial-gradient(ellipse at bottom, #2b1055 0%, #150524 100%) !important;
+  animation: bg-pulse 10s infinite alternate;
+}
+
+@keyframes bg-pulse {
+  0% { background: radial-gradient(ellipse at bottom, #2b1055 0%, #150524 100%); }
+  100% { background: radial-gradient(ellipse at bottom, #3b176e 0%, #10031c 100%); }
+}
+
+body.theme-anniversary .glass {
+  background: rgba(255, 182, 193, 0.1) !important;
+  border-color: rgba(255, 182, 193, 0.3) !important;
+  box-shadow: 0 0 25px rgba(255, 182, 193, 0.15) !important;
+}
+
+body.theme-anniversary .text-glow {
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
 }
 

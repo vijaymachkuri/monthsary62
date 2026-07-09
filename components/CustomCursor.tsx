@@ -9,33 +9,56 @@ export default function CustomCursor() {
   const [clicked, setClicked] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
 
   useEffect(() => {
+    document.body.classList.add('custom-cursor-active');
+    
     // Detect touch device
     if (window.matchMedia("(pointer: coarse)").matches) {
       setIsTouch(true);
       return;
     }
 
-    const updatePosition = (e: MouseEvent) => {
+    const updateMousePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
       if (!visible) setVisible(true);
     };
 
-    const handleMouseDown = () => setClicked(true);
-    const handleMouseUp = () => setClicked(false);
+    const updateHoverState = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      setIsHovering(
+        target.tagName.toLowerCase() === 'button' ||
+        target.tagName.toLowerCase() === 'a' ||
+        target.closest('button') !== null ||
+        target.closest('a') !== null
+      );
+    };
+
+    const handleMouseDown = () => {
+      setClicked(true);
+      setIsClicking(true);
+    };
+    const handleMouseUp = () => {
+      setClicked(false);
+      setIsClicking(false);
+    };
     
     const handleMouseLeave = () => setVisible(false);
     const handleMouseEnter = () => setVisible(true);
 
-    window.addEventListener('mousemove', updatePosition);
+    window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener('mouseover', updateHoverState);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
-      window.removeEventListener('mousemove', updatePosition);
+      document.body.classList.remove('custom-cursor-active');
+      window.removeEventListener('mousemove', updateMousePosition);
+      window.removeEventListener('mouseover', updateHoverState);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('mouseleave', handleMouseLeave);
