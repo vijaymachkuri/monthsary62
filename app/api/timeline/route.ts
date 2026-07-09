@@ -17,7 +17,7 @@ const defaultTimeline = [
 export async function GET() {
   try {
     const { data: list, error: listError } = await supabaseAdmin.storage.from('memories').list('', {
-      searchString: FILENAME
+      search: FILENAME
     });
 
     if (listError) throw listError;

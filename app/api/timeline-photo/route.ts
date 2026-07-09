@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
     // Check if the file exists in storage
     const { data: list, error } = await supabaseAdmin.storage.from('memories').list('', {
-      searchString: filename
+      search: filename
     });
     
     if (error) throw error;

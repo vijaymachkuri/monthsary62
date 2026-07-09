@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   // Fetch dynamic recipient emails from settings.json
   let recipientEmails = 'vijaymachkuri12@gmail.com, mzjhe9601@gmail.com'; // fallback
   try {
-    const { data: list } = await supabaseAdmin.storage.from('memories').list('', { searchString: 'settings.json' });
+    const { data: list } = await supabaseAdmin.storage.from('memories').list('', { search: 'settings.json' });
     if (list && list.some(f => f.name === 'settings.json')) {
       const { data } = await supabaseAdmin.storage.from('memories').download('settings.json');
       if (data) {
