@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-love-pink: #ffb6c1;
+    --color-love-rose: #b76e79;
+    --color-love-lavender: #e6e6fa;
+    --color-love-cream: #fffdd0;
+    --color-love-gold: #ffd700;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-[#050510] text-white overflow-x-hidden selection:bg-pink-500/30;
+    cursor: none;
+  }
+  
+  /* Fallback if JS cursor fails */
+  @media (pointer: coarse) {
+    body {
+      cursor: auto;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+  
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)];
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px rgba(255, 182, 193, 0.5), 0 0 20px rgba(255, 182, 193, 0.3);
+  }
+}
+
+.heart-beat {
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
+.float-up {
+  animation: floatUp var(--duration, 10s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(110vh) scale(var(--scale, 1)) rotate(0deg); opacity: 0; }
+  10% { opacity: var(--max-opacity, 0.6); }
+  90% { opacity: var(--max-opacity, 0.6); }
+  100% { transform: translateY(-10vh) scale(var(--scale, 1)) rotate(var(--rot, 360deg)); opacity: 0; }
+}
+
+.twinkle {
+  animation: twinkle var(--duration, 3s) ease-in-out infinite alternate;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px 2px rgba(255,255,255,0.4); }
+}
+
+.aurora-bg {
+  background: linear-gradient(
+    45deg,
+    rgba(15, 12, 41, 1) 0%,
+    rgba(48, 43, 99, 1) 50%,
+    rgba(36, 36, 62, 1) 100%
+  );
+  background-size: 200% 200%;
+  animation: aurora 15s ease infinite;
+}
+
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.typewriter-text {
+  overflow: hidden;
+  border-right: 2px solid rgba(255,182,193,0.7);
+  white-space: nowrap;
+  animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: rgba(255,182,193,0.7); }
+}
+
